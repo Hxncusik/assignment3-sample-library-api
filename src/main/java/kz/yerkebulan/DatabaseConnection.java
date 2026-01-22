@@ -1,10 +1,8 @@
 package kz.yerkebulan;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
-public class DatabaseConnection {
+public class DatabaseConnection implements AutoCloseable {
     private String url;
     private String user;
     private String pass;
@@ -16,10 +14,24 @@ public class DatabaseConnection {
         this.pass = pass;
     }
 
-    public Connection getConnection() throws SQLException {
-        if (connection == null) {
+    public synchronized Connection getConnection() throws SQLException {
+        if (connection == null || connection.isClosed()) {
             connection = DriverManager.getConnection(url, user, pass);
         }
         return connection;
+    }
+
+    public PreparedStatement prepareStatement(String sql) {
+        try {
+            return getConnection().prepareStatement(sql);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void close() throws SQLException {
+        if (connection != null && !connection.isClosed()) {
+            connection.close();
+        }
     }
 }
