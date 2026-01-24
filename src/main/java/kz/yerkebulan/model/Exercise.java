@@ -1,35 +1,43 @@
 package kz.yerkebulan.model;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
-
-@Getter
-@Setter
 public class Exercise implements Nameable, Descriptable {
-    private final int id;
+    private int id;
     private String name;
     private String description;
-    private List<Workout> workouts;
+
+    public Exercise() {}
 
     public Exercise(int id, String name, String description) {
         this.id = id;
-        this.name = name;
+        setName(name);
         this.description = description;
-        this.workouts = new ArrayList<>();
     }
 
-    public void start() {
-        System.out.println("Starting exercise");
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    @Override
+    public String getName() { return name; }
+
+    @Override
+    public void setName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Exercise name cannot be empty");
+        }
+        this.name = name;
     }
 
-    public void pause() {
-        System.out.println("Pausing exercise");
+    @Override
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+
+    @Override
+    public String getFullInfo() {
+        return "Exercise: " + name + " (" + description + ")";
     }
 
-    public void stop() {
-        System.out.println("Stopping exercise");
+    @Override
+    public String toString() {
+        return getFullInfo();
     }
 }
