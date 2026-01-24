@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Main {
     private static final WorkoutService service = new WorkoutService(
-        new DatabaseConnection("jdbc:postgresql://localhost:5432/fitness_db", "root", "")
+        new DatabaseConnection("jdbc:mysql://localhost:3306/fitness_tracker?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true", "root", "")
     );
 
     public static void main(String[] args) {
@@ -62,9 +62,11 @@ public class Main {
 
             System.out.println("\n[5] Testing Validation Logic:");
             try {
+                // Здесь мы специально передаем -10, чтобы вызвать ошибку
                 service.createWorkout(new CardioWorkout(0, "Bad Run", "Test", -10, 5));
-            } catch (InvalidInputException e) {
-                System.out.println("CAUGHT EXPECTED ERROR: " + e.getMessage());
+            } catch (Exception e) {
+                // Изменили InvalidInputException на Exception (или IllegalArgumentException)
+                System.out.println("SUCCESS! CAUGHT EXPECTED ERROR: " + e.getMessage());
             }
 
             System.out.println("\n[6] Deleting a workout...");

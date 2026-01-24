@@ -20,7 +20,7 @@ public class DatabaseConnection implements AutoCloseable {
 
     public Connection getConnection() {
         try {
-            if (connection == null) {
+            if (connection == null || connection.isClosed()) {
                 connection = DriverManager.getConnection(url, username, password);
             }
         } catch (SQLException e) {
