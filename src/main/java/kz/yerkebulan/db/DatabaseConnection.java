@@ -1,4 +1,4 @@
-package kz.yerkebulan;
+package kz.yerkebulan.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
